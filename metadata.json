@@ -1,6 +1,6 @@
 {
-  "name": "",
-  "description": "",
+  "name": "Segunda VA - Fruticultura",
+  "description": "Plataforma de estudos para a Segunda VA de Fruticultura, com resumos e simulados dinâmicos.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
