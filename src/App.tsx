@@ -20,17 +20,17 @@ export default function App() {
   const currentCrop = crops.find(c => c.id === selectedCrop)!;
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col lg:flex-row font-sans">
+    <div className="h-screen bg-gray-100 flex flex-col lg:flex-row font-sans overflow-hidden">
       {/* Sidebar */}
-      <div className="w-full lg:w-72 bg-green-900 text-white shadow-xl flex-shrink-0">
-        <div className="p-8">
-          <h1 className="text-2xl font-bold flex items-center gap-3">
-            <Sprout className="w-8 h-8 text-green-400" /> 
+      <div className="w-full lg:w-72 bg-green-900 text-white shadow-xl flex-shrink-0 flex flex-col">
+        <div className="p-4 lg:p-8 flex-shrink-0">
+          <h1 className="text-xl lg:text-2xl font-bold flex items-center gap-2 lg:gap-3">
+            <Sprout className="w-6 h-6 lg:w-8 lg:h-8 text-green-400" /> 
             Fruticultura
           </h1>
-          <p className="text-green-300 text-sm mt-2 font-medium tracking-wide">PLATAFORMA DE ESTUDOS</p>
+          <p className="text-green-300 text-xs lg:text-sm mt-1 lg:mt-2 font-medium tracking-wide">PLATAFORMA DE ESTUDOS</p>
         </div>
-        <nav className="mt-4 flex flex-col gap-1 px-4">
+        <nav className="flex flex-row lg:flex-col gap-2 px-4 pb-4 lg:pb-8 overflow-x-auto lg:overflow-y-auto no-scrollbar">
           {crops.map(crop => (
             <button
               key={crop.id}
@@ -38,7 +38,7 @@ export default function App() {
                 setSelectedCrop(crop.id);
                 setActiveTab('simulado'); // Reseta para simulado ao trocar
               }}
-              className={`w-full text-left px-6 py-4 rounded-lg font-medium transition-all duration-200 ${
+              className={`whitespace-nowrap flex-shrink-0 text-center lg:text-left px-5 lg:px-6 py-2.5 lg:py-4 rounded-lg font-medium transition-all duration-200 ${
                 selectedCrop === crop.id 
                   ? 'bg-green-800 text-green-100 shadow-inner' 
                   : 'hover:bg-green-800/50 text-green-100/70'
@@ -51,33 +51,33 @@ export default function App() {
       </div>
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col h-screen overflow-hidden">
+      <div className="flex-1 flex flex-col min-h-0 bg-gray-50 relative">
         {/* Top Navbar */}
-        <div className="bg-white border-b px-6 py-4 flex gap-4 shadow-sm z-10 overflow-x-auto">
+        <div className="bg-white border-b px-4 lg:px-6 py-3 lg:py-4 flex gap-2 lg:gap-4 shadow-sm z-10 overflow-x-auto flex-shrink-0 no-scrollbar">
           <button
             onClick={() => setActiveTab('simulado')}
-            className={`flex items-center gap-2 px-5 py-2.5 rounded-md transition-colors font-medium text-sm whitespace-nowrap ${
+            className={`flex items-center gap-2 px-4 lg:px-5 py-2 lg:py-2.5 rounded-md transition-colors font-medium text-sm whitespace-nowrap ${
               activeTab === 'simulado' 
                 ? 'bg-green-100 text-green-800' 
                 : 'text-gray-500 hover:bg-gray-100'
             }`}
           >
-            <CheckSquare className="w-5 h-5" /> Simulado Dinâmico
+            <CheckSquare className="w-4 h-4 lg:w-5 lg:h-5" /> Simulado Dinâmico
           </button>
           <button
             onClick={() => setActiveTab('material')}
-            className={`flex items-center gap-2 px-5 py-2.5 rounded-md transition-colors font-medium text-sm whitespace-nowrap ${
+            className={`flex items-center gap-2 px-4 lg:px-5 py-2 lg:py-2.5 rounded-md transition-colors font-medium text-sm whitespace-nowrap ${
               activeTab === 'material' 
                 ? 'bg-green-100 text-green-800' 
                 : 'text-gray-500 hover:bg-gray-100'
             }`}
           >
-            <BookOpen className="w-5 h-5" /> Material de Revisão
+            <BookOpen className="w-4 h-4 lg:w-5 lg:h-5" /> Material de Revisão
           </button>
         </div>
 
         {/* Scrollable Content */}
-        <div className="flex-1 overflow-auto p-4 md:p-8 bg-gray-50">
+        <div className="flex-1 overflow-auto p-4 lg:p-8">
           <div className="max-w-5xl mx-auto">
             {activeTab === 'material' ? (
               <StudyMaterial content={currentCrop.data.content} />
