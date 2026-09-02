@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Question } from '../types';
 import { CheckCircle2, XCircle, ChevronRight, RotateCcw } from 'lucide-react';
 
@@ -9,11 +9,22 @@ export function Quiz({ questions }: { questions: Question[] }) {
   const [score, setScore] = useState(0);
   const [finished, setFinished] = useState(false);
 
-  const handleOptionClick = (index: number) => {
+  const shuffledIndices = useMemo(() => {
+    if (!questions[currentIndex]) return [];
+    const indices = questions[currentIndex].options.map((_, i) => i);
+    // Fisher-Yates shuffle
+    for (let i = indices.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [indices[i], indices[j]] = [indices[j], indices[i]];
+    }
+    return indices;
+  }, [currentIndex, questions]);
+
+  const handleOptionClick = (originalIndex: number) => {
     if (showExplanation) return;
-    setSelectedOption(index);
+    setSelectedOption(originalIndex);
     setShowExplanation(true);
-    if (index === questions[currentIndex].correctAnswerIndex) {
+    if (originalIndex === questions[currentIndex].correctAnswerIndex) {
       setScore(s => s + 1);
     }
   };
@@ -60,9 +71,10 @@ export function Quiz({ questions }: { questions: Question[] }) {
       <h3 className="text-xl font-bold text-gray-800 mb-8 leading-relaxed">{q.text}</h3>
       
       <div className="space-y-4">
-        {q.options.map((opt, idx) => {
-          const isSelected = selectedOption === idx;
-          const isCorrect = idx === q.correctAnswerIndex;
+        {shuffledIndices.map((originalIdx, renderIdx) => {
+          const optText = q.options[originalIdx].replace(/^[A-Z]\)\s*/, '');
+          const isSelected = selectedOption === originalIdx;
+          const isCorrect = originalIdx === q.correctAnswerIndex;
           let btnClass = "w-full text-left p-5 rounded-md border-2 transition-all duration-200 ";
 
           if (!showExplanation) {
@@ -73,10 +85,15 @@ export function Quiz({ questions }: { questions: Question[] }) {
             else btnClass += "border-gray-200 opacity-60";
           }
 
+          const letters = ['A', 'B', 'C', 'D', 'E'];
+
           return (
-            <button key={idx} onClick={() => handleOptionClick(idx)} className={btnClass} disabled={showExplanation}>
+            <button key={originalIdx} onClick={() => handleOptionClick(originalIdx)} className={btnClass} disabled={showExplanation}>
               <div className="flex justify-between items-center gap-4">
-                <span className="leading-relaxed">{opt}</span>
+                <span className="leading-relaxed">
+                  <span className="font-bold mr-2">{letters[renderIdx]})</span>
+                  {optText}
+                </span>
                 {showExplanation && isCorrect && <CheckCircle2 className="text-green-500 w-6 h-6 flex-shrink-0" />}
                 {showExplanation && isSelected && !isCorrect && <XCircle className="text-red-500 w-6 h-6 flex-shrink-0" />}
               </div>
